@@ -160,39 +160,62 @@ void makePieces() {
 	
 }
 
-string stringKind(Kind kind) {
+string stringPiece(Color color,Kind kind) {
+	string text = "";
+	if (color == White)
+		text.append("White ");
+	else
+		text.append("Black ");
 	switch (kind)
 	{
 	case Pawn:
-		return "Pawn";
+		text.append("Pawn");
 		break;
 	case Rook:
-		return "Rook";
+		text.append("Rook");
 		break;
 	case Knight:
-		return "Knight";
+		text.append("Knigh");
 		break;
 	case Bishop:
-		return "Bishop";
+		text.append("Bishop");
 		break;
 	case Queen:
-		return "Queen";
+		text.append("Queen");
 		break;
 	case King:
-		return "King";
+		text.append("King");
 		break;
 	default:
 		break;
 	}
+	return text;
+}
+
+
+void printBoard() {
+	String Board[8][8];
+	for (int i = 0; i < 32; i++) {
+		string text = stringPiece(pieces[i].getColor(), pieces[i].getKind());
+		Board[pieces[i].getYPos() - 1][pieces[i].getXPos() - 1].append(text);
+	}
+	for (int y = 7; y >= 0; y--) {
+		for (int i = 0; i < 8; i++) {
+			cout << setw(14) << Board[y][i];
+		}
+		cout << endl;
+	}
+}
+
+void game() {
+	makePieces();
+	printBoard();
 }
 
 
 
-
-
-
 int main() {
-
+	game();
 
 
 	return 0;
