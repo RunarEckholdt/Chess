@@ -281,10 +281,18 @@ bool allowedPawnMovement(int dP[],Color color,int yPos,int newPos[]) {//dP = del
 bool allowedRookMovement(int dP[], Color color,int newPos[]) {
 	Piece pieceAtPos = PieceAtPos(newPos);
 	if (dP[0] > 0 && dP[1] == 0 + dP[0]==0 && dP[1]>0) {
-		if (pieceAtPos.getColor != color)return true;//if piece at pos is not the same as piece moving
+		if (pieceAtPos.getColor() != color)return true;//if piece at pos is not the same as piece moving
 	}
 	return false;
 	
+}
+
+
+bool allowedBishopMovement(int dP[],Color color, int newPos[]) {
+	Piece pieceAtPos = PieceAtPos(newPos);
+	if (abs(dP[0]) > 0 && abs(dP[0]) == abs(dP[1]) && pieceAtPos.getColor() != color)
+		return true;
+	return false;
 }
 
 
