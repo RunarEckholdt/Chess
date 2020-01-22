@@ -1,56 +1,7 @@
-#include "../std_lib_facilities.h"
-enum Kind {Pawn,Rook,Knight,Bishop,Queen,King,NONE};
-enum Color {White,Black,NONE};
+#include "Piece.h"
+#include "MovementCheck.h"
 
-
-
-
-class Piece {
-	Kind kind;
-	Color color;
-	int id;
-	int xPos;
-	int yPos;
-public:
-	Kind getKind() { return kind; }
-	Color getColor() { return color; }
-	int getId() { return id; }
-	int getXPos() { return xPos; }
-	int getYPos() { return yPos; }
-
-	void changePos(int x, int y) {
-		xPos = x;
-		yPos = y;
-	}
-
-	vector <int> getPos() {
-		vector <int> pos;
-		pos.push_back(xPos);
-		pos.push_back(yPos);
-		return pos;
-	}
-	
-
-	Piece() {
-		kind = Kind::NONE;
-		color = Color::NONE;
-		id = -1;
-		xPos = 0;
-		yPos = 0;
-	}
-	
-	Piece(Kind k, Color c, int i, int x, int y) {
-		kind = k;
-		color = c;
-		id = i;
-		xPos = x;
-		yPos = y;
-	}
-
-
-};
-
-
+MovementCheck mcheck;
 
 class PieceOverview {
 	Kind kind;
@@ -234,11 +185,11 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 	switch (piece.getKind())
 	{
 	case Pawn:
-		if (allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos) && allowedPath())
+		if (mcheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos,PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
 	case Rook:
-		if (allowedRookMovement(deltaPos, piece.getColor(), newPos) && allowedPath())
+		if (mcheck.allowedRookMovement(deltaPos, piece.getColor(), newPos,PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
 	case Knight:
@@ -255,50 +206,14 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 	return false;
 }
 
-bool allowedPawnMovement(int dP[],Color color,int yPos,int newPos[]) {//dP = deltaPosition
-	Piece pieceAtPos = PieceAtPos(newPos);
-	if (color == White) {
-		if (dP[0] == 0 && pieceAtPos.getId() == -1) {//if no movement in x axis and no piece at position (id -1 represent no piece) a forward movemnt with pawn does not allow killing enemy piece
-			if (dP[1] == 2 && yPos == 2)return true;
-			if (dP[1] == 1) return true;
-		}
-		if (abs(dP[0]) == 1 && dP[1] == 1 && pieceAtPos.getColor() ==Black)
-			return true;
-		return false;
-	}
-	if (color == Black) {
-		if (dP[0] == 0 && pieceAtPos.getId() == -1) {//if no movement in x axis and no piece at position (id -1 represent no piece)
-			if (dP[1] == -2 && yPos == 7 )return true;
-			if (dP[1] == -1) return true;
-		}
-		if (abs(dP[0]) == 1 && dP[1] == -1 && pieceAtPos.getColor() == White)
-			return true;
-		return false;
-	}
-	return false;
-}
-
-bool allowedRookMovement(int dP[], Color color,int newPos[]) {
-	Piece pieceAtPos = PieceAtPos(newPos);
-	if (dP[0] > 0 && dP[1] == 0 + dP[0]==0 && dP[1]>0) {
-		if (pieceAtPos.getColor() != color)return true;//if piece at pos is not the same as piece moving
-	}
-	return false;
-	
-}
 
 
-bool allowedBishopMovement(int dP[],Color color, int newPos[]) {
-	Piece pieceAtPos = PieceAtPos(newPos);
-	if (abs(dP[0]) > 0 && abs(dP[0]) == abs(dP[1]) && pieceAtPos.getColor() != color)
-		return true;
-	return false;
-}
+bool isRed[8][8];
+
 
 
 void game() {
 	makePieces();
-	printBoard();
 	printBoard();
 }
 

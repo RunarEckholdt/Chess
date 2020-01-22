@@ -148,6 +148,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chess2.0.cpp" />
+    <ClCompile Include="Piece.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Piece.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
