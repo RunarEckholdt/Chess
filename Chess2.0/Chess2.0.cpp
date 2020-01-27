@@ -1,7 +1,11 @@
 #include "Piece.h"
 #include "MovementCheck.h"
+#include "../std_lib_facilities.h"
 
 MovementCheck mcheck;
+bool running = true;
+
+class CinError {};
 
 class PieceOverview {
 	Kind kind;
@@ -50,6 +54,7 @@ vector <Piece> pieces;
 vector <PieceOverview> pieceOverview;
 
 Piece PieceAtPos(int pos[]) {
+	
 	for (Piece x : pieces) {
 		if (x.getXPos() == pos[0] && x.getYPos() == pos[1])
 			return x;
@@ -166,16 +171,22 @@ void printBoard() {
 		string text = stringPiece(pieces[i].getColor(), pieces[i].getKind());
 		Board[pieces[i].getYPos() - 1][pieces[i].getXPos() - 1].append(text);
 	}
-	for (int y = 7; y >= 0; y--) {
+	for (int y = 8; y >= 1; y--) {
+		cout << y;
 		for (int i = 0; i < 8; i++) {
-			cout << setw(14) << Board[y][i];
+			cout <<setw(1)<< "[" << setw(12) << Board[y-1][i]<< setw(1) << "]";
 		}
 		cout << endl;
 	}
+	for (int i = 1; i <= 8; i++) 
+		cout << setw(14) << i;
+	cout << endl;
 }
 
-int* DeltaPos(int curPos[], int newPos []) {
-	int deltaPos[] = { newPos[0] - curPos[0], newPos[1] - curPos[1] }; //where first value is x second value is y
+int* DeltaPos(int curPos[], int newPos [],int* deltaPos) {
+	deltaPos[0] = newPos[0] - curPos[0]; //x
+	deltaPos[1] = newPos[1] - curPos[1]; //y
+	cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
 	return deltaPos;
 }
 
@@ -187,6 +198,7 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 	switch (piece.getKind())
 	{
 	case Kind::Pawn:
+		cout << "Checking movement for pawn\n";
 		if (mcheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos,PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
@@ -209,14 +221,69 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 }
 
 
+int* readCords(int* pos) {
+	try {
+		for (int i = 0; i < 2; i++) {
+			cin >> pos[i];
+			if (!cin)throw CinError {};
+		}
+		return pos;
+	}
+	catch(CinError){
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cerr << "Invalid input\n";
+		return readCords(pos);
+	
+	}
+}
 
-bool isRed[8][8];
+void player1() {
+	printBoard();
+	while (true) {
+		cout << "Piece to move: ";
+		int pos[2];
+		readCords(pos);
+		Piece piece = PieceAtPos(pos);
+		if (piece.getColor() != Color::White) {
+			cerr << "You are not allowed to move this piece";
+		}
+		else {
+			string pieceString = (stringPiece(piece.getColor(), piece.getKind()));
+			cout << "Where do you want to move this " << pieceString << "?\n";
+			int newPos[2];
+			readCords(newPos);
+			int dP[2];
+			DeltaPos(pos, newPos, dP);
+			if (checkMovement(dP, piece, newPos)) {
+				cout << "Movement sucess\n";
+				piece.changePos(newPos[0], newPos[1]);
+				for (int i = 0; i < 32; i++) {
+					if (piece.getId() == pieces[i].getId())
+						pieces[i] = piece;
+				}
+				return;
+			}
+			else
+				cerr << "Movement not allowed\n";
+		}
+	}
 
 
+}
+
+void player2() {
+	return;
+}
 
 void game() {
+	
 	makePieces();
-	printBoard();
+	//printBoard();
+	while (running) {
+		player1();
+		player2();
+	}
 }
 
 
