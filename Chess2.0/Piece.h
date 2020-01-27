@@ -1,6 +1,6 @@
 #include "../../std_lib_facilities.h"
-enum Kind { Pawn, Rook, Knight, Bishop, Queen, King, NONE };
-enum Color { White, Black, NONE };
+enum class Kind { Pawn, Rook, Knight, Bishop, Queen, King, NONE };
+enum class Color { White, Black, BLANK };
 #pragma once
 class Piece {
 	Kind kind;

@@ -1,21 +1,21 @@
 #include "MovementCheck.h"
 
 bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, int newPos[], Piece pieceAtPos) {//dP = deltaPosition
-	if (color == White) {
+	if (color == Color::White) {
 		if (dP[0] == 0 && pieceAtPos.getId() == -1) {//if no movement in x axis and no piece at position (id -1 represent no piece) a forward movemnt with pawn does not allow killing enemy piece
 			if (dP[1] == 2 && yPos == 2)return true;
 			if (dP[1] == 1) return true;
 		}
-		if (abs(dP[0]) == 1 && dP[1] == 1 && pieceAtPos.getColor() == Black)
+		if (abs(dP[0]) == 1 && dP[1] == 1 && pieceAtPos.getColor() == Color::Black)
 			return true;
 		return false;
 	}
-	if (color == Black) {
+	if (color == Color::Black) {
 		if (dP[0] == 0 && pieceAtPos.getId() == -1) {//if no movement in x axis and no piece at position (id -1 represent no piece)
 			if (dP[1] == -2 && yPos == 7)return true;
 			if (dP[1] == -1) return true;
 		}
-		if (abs(dP[0]) == 1 && dP[1] == -1 && pieceAtPos.getColor() == White)
+		if (abs(dP[0]) == 1 && dP[1] == -1 && pieceAtPos.getColor() == Color::White)
 			return true;
 		return false;
 	}
@@ -54,5 +54,9 @@ bool MovementCheck::allowedQueenMovement(int dP[], Color color, int newPos[], Pi
 	if (abs(dP[0]) > 0 && abs(dP[0]) == abs(dP[1]) && pieceAtPos.getColor() != color)
 		return true;
 	return false;
+}
+
+bool MovementCheck::allowedKingMovement(int dP[], Color color, int newPos[], Piece pieceAtPos) {
+	return true;
 }
 

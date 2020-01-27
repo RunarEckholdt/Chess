@@ -21,22 +21,22 @@ public:
 		color = c;
 		switch (kind)
 		{
-		case Pawn:
+		case Kind::Pawn:
 			piecesLeft = 8;
 			break;
-		case Rook:
+		case Kind::Rook:
 			piecesLeft = 2;
 			break;
-		case Knight:
+		case Kind::Knight:
 			piecesLeft = 2;
 			break;
-		case Bishop:
+		case Kind::Bishop:
 			piecesLeft = 2;
 			break;
-		case Queen:
+		case Kind::Queen:
 			piecesLeft = 1;
 			break;
-		case King:
+		case Kind::King:
 			piecesLeft = 1;
 			break;
 		default:
@@ -60,65 +60,65 @@ Piece PieceAtPos(int pos[]) {
 
 void makePieces() {
 	int id = 1;
-	Color c = White;
+	Color c = Color::White;
 	for (int y = 0; y < 2; y++) {
 			for (int i = 1; i <= 8; i++) {//making pawns first round white, second round black
-				Piece piece(Pawn, c, id, i, 2+5*y);
+				Piece piece(Kind::Pawn, c, id, i, 2+5*y);
 				pieces.push_back(piece);
 				id++;
 			}
-			c = Black;
+			c = Color::Black;
 			id = 17;
 		}
 	id = 9;
-	c = White;
+	c = Color::White;
 	for (int y = 0; y < 2; y++) {
 		for (int i = 0; i < 2; i++) {//making rooks
-			Piece piece(Rook, c, id, 1+7*i, 1 + 7 * y);
+			Piece piece(Kind::Rook, c, id, 1+7*i, 1 + 7 * y);
 			pieces.push_back(piece);
 			id++;
 		}
 		id = 25;
-		c = Black;
+		c = Color::Black;
 	}
 	id = 11;
-	c = White;
+	c = Color::White;
 	for (int y = 0; y < 2; y++) {
 		for (int i = 0; i < 2; i++) {//making knights
-			Piece piece(Knight, c, id, 2 + 5 * i, 1 + 7 * y);
+			Piece piece(Kind::Knight, c, id, 2 + 5 * i, 1 + 7 * y);
 			pieces.push_back(piece);
 			id++;
 		}
 		id = 27;
-		c = Black;
+		c = Color::Black;
 	}
 
 	id = 13;
-	c = White;
+	c = Color::White;
 	for (int y = 0; y < 2; y++) {
 		for (int i = 0; i < 2; i++) {//making bishop
-			Piece piece(Bishop, c, id, 3 + 3 * i, 1 + 7 * y);
+			Piece piece(Kind::Bishop, c, id, 3 + 3 * i, 1 + 7 * y);
 			pieces.push_back(piece);
 			id++;
 		}
 		id = 29;
-		c = Black;
+		c = Color::Black;
 	}
 	id = 15;
-	c = White;
+	c = Color::White;
 	for (int y = 0; y < 2; y++) {//making queens
-		Piece piece(Queen, c, id, 4, 1 + 7 * y);
+		Piece piece(Kind::Queen, c, id, 4, 1 + 7 * y);
 		pieces.push_back(piece);
 		id = 31;
-		c = Black;
+		c = Color::Black;
 	}
 	id = 16;
-	c = White;
+	c = Color::White;
 	for (int y = 0; y < 2; y++) {//making kings
-		Piece piece(King, c, id, 5, 1 + 7 * y);
+		Piece piece(Kind::King, c, id, 5, 1 + 7 * y);
 		pieces.push_back(piece);
 		id = 32;
-		c = Black;
+		c = Color::Black;
 	}
 
 
@@ -128,28 +128,28 @@ void makePieces() {
 
 string stringPiece(Color color,Kind kind) {
 	string text = "";
-	if (color == White)
+	if (color == Color::White)
 		text.append("White ");
 	else
 		text.append("Black ");
 	switch (kind)
 	{
-	case Pawn:
+	case Kind::Pawn:
 		text.append("Pawn");
 		break;
-	case Rook:
+	case Kind::Rook:
 		text.append("Rook");
 		break;
-	case Knight:
+	case Kind::Knight:
 		text.append("Knigh");
 		break;
-	case Bishop:
+	case Kind::Bishop:
 		text.append("Bishop");
 		break;
-	case Queen:
+	case Kind::Queen:
 		text.append("Queen");
 		break;
-	case King:
+	case Kind::King:
 		text.append("King");
 		break;
 	default:
@@ -179,26 +179,28 @@ int* DeltaPos(int curPos[], int newPos []) {
 	return deltaPos;
 }
 
-bool allowedPath();
+bool allowedPath() {
+	return true;
+}
 
 bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 	switch (piece.getKind())
 	{
-	case Pawn:
+	case Kind::Pawn:
 		if (mcheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos,PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
-	case Rook:
+	case Kind::Rook:
 		if (mcheck.allowedRookMovement(deltaPos, piece.getColor(), newPos,PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
-	case Knight:
+	case Kind::Knight:
 		break;
-	case Bishop:
+	case Kind::Bishop:
 		break;
-	case Queen:
+	case Kind::Queen:
 		break;
-	case King:
+	case Kind::King:
 		break;
 	default:
 		break;

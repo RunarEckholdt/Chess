@@ -22,7 +22,7 @@ vector <int> Piece::getPos() {
 
 Piece::Piece() {
 	kind = Kind::NONE;
-	color = Color::NONE;
+	color = Color::BLANK;
 	id = -1;
 	xPos = 0;
 	yPos = 0;
