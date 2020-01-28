@@ -2,9 +2,7 @@
 
 bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, int newPos[], Piece pieceAtPos) {//dP = deltaPosition
 	if (color == Color::White) {
-		cout << "Delta pos" << dP[0] << " " << dP[1]<<endl;
 		if (dP[0] == 0 && pieceAtPos.getId() == -1) {//if no movement in x axis and no piece at position (id -1 represent no piece) a forward movemnt with pawn does not allow killing enemy piece
-			cout << "Forward movement\n";
 			if (dP[1] == 2 && yPos == 2)return true;
 			if (dP[1] == 1) return true;
 		}
@@ -26,7 +24,7 @@ bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, int new
 
 
 bool MovementCheck::allowedRookMovement(int dP[], Color color, int newPos[], Piece pieceAtPos) {
-	if (dP[0] > 0 && dP[1] == 0 + dP[0] == 0 && dP[1] > 0) {
+	if (abs(dP[0]) > 0 && dP[1] == 0 || dP[0] == 0 && abs(dP[1]) > 0) {
 		if (pieceAtPos.getColor() != color)return true;//if piece at pos is not the same as piece moving
 	}
 	return false;
