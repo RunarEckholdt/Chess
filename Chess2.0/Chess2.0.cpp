@@ -168,8 +168,10 @@ void printBoard() {
 	system("CLS");
 	String Board[8][8];
 	for (int i = 0; i < 32; i++) {
-		string text = stringPiece(pieces[i].getColor(), pieces[i].getKind());
-		Board[pieces[i].getYPos() - 1][pieces[i].getXPos() - 1].append(text);
+		if (pieces[i].getXPos() > 0 && pieces[i].getYPos() > 0) { //hvis brikken ikke er flyttet av brettet (død)
+			string text = stringPiece(pieces[i].getColor(), pieces[i].getKind());
+			Board[pieces[i].getYPos() - 1][pieces[i].getXPos() - 1].append(text);
+		}
 	}
 	for (int y = 8; y >= 1; y--) {
 		cout << y;
@@ -186,7 +188,7 @@ void printBoard() {
 int* DeltaPos(int curPos[], int newPos [],int* deltaPos) {
 	deltaPos[0] = newPos[0] - curPos[0]; //x
 	deltaPos[1] = newPos[1] - curPos[1]; //y
-	cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
+	//cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
 	return deltaPos;
 }
 
@@ -207,10 +209,17 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 			return true;
 		break;
 	case Kind::Knight:
+		if (mcheck.allowedKnighMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)))
+			return true;
 		break;
 	case Kind::Bishop:
+		if (mcheck.allowedBishopMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
+			return true;
 		break;
 	case Kind::Queen:
+		if (mcheck.allowedQueenMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
+			return true;
+
 		break;
 	case Kind::King:
 		break;
@@ -238,6 +247,20 @@ int* readCords(int* pos) {
 	}
 }
 
+void movement(Piece piece,int newPos[]) {
+	piece.changePos(newPos[0], newPos[1]);
+	Piece pieceNewPos = PieceAtPos(newPos);
+	if (pieceNewPos.getColor() != Color::NONE)//hvis det er en brikke der, endre posisjonen dens ut av kartet
+		pieceNewPos.changePos(-1, -1);//-1 representerer at brikken er død
+	for (int i = 0; i < 32; i++) {
+		if (piece.getId() == pieces[i].getId())
+			pieces[i] = piece;
+		if (pieceNewPos.getId() == pieces[i].getId())
+			pieces[i] = pieceNewPos;
+	}
+	
+}
+
 void player1() {
 	printBoard();
 	while (true) {
@@ -246,7 +269,7 @@ void player1() {
 		readCords(pos);
 		Piece piece = PieceAtPos(pos);
 		if (piece.getColor() != Color::White) {
-			cerr << "You are not allowed to move this piece";
+			cerr << "You are not allowed to move this piece\n";
 		}
 		else {
 			string pieceString = (stringPiece(piece.getColor(), piece.getKind()));
@@ -256,12 +279,7 @@ void player1() {
 			int dP[2];
 			DeltaPos(pos, newPos, dP);
 			if (checkMovement(dP, piece, newPos)) {
-				cout << "Movement sucess\n";
-				piece.changePos(newPos[0], newPos[1]);
-				for (int i = 0; i < 32; i++) {
-					if (piece.getId() == pieces[i].getId())
-						pieces[i] = piece;
-				}
+				movement(piece,newPos);
 				return;
 			}
 			else
