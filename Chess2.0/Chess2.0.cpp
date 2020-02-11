@@ -3,7 +3,10 @@
 #include "../std_lib_facilities.h"
 
 MovementCheck mcheck;
-bool running = true;
+namespace myglobals{
+	bool running = true;
+}
+
 
 class CinError {};
 
@@ -179,6 +182,7 @@ void printBoard() {
 			cout <<setw(1)<< "[" << setw(12) << Board[y-1][i]<< setw(1) << "]";
 		}
 		cout << endl;
+		//cout << "----------------------------------------------------------------------------------------------------------------\n";
 	}
 	for (int i = 1; i <= 8; i++) 
 		cout << setw(14) << i;
@@ -298,7 +302,7 @@ void game() {
 	
 	makePieces();
 	//printBoard();
-	while (running) {
+	while (myglobals::running) {
 		player1();
 		player2();
 	}
