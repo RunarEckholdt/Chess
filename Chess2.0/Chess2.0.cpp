@@ -1,8 +1,11 @@
 #include "Piece.h"
 #include "MovementCheck.h"
+#include "AllowedPath.h"
 #include "../std_lib_facilities.h"
 
 MovementCheck mcheck;
+AllowedPath aPath;
+
 namespace myglobals{
 	bool running = true;
 }
@@ -55,6 +58,7 @@ public:
 
 vector <Piece> pieces;
 vector <PieceOverview> pieceOverview;
+
 
 Piece PieceAtPos(int pos[]) {
 	
@@ -213,7 +217,7 @@ bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 			return true;
 		break;
 	case Kind::Knight:
-		if (mcheck.allowedKnighMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)))
+		if (mcheck.allowedKnighMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
 			return true;
 		break;
 	case Kind::Bishop:
@@ -295,7 +299,30 @@ void player1() {
 }
 
 void player2() {
-	return;
+	printBoard();
+	while (true) {
+		cout << "Piece to move: ";
+		int pos[2];
+		readCords(pos);
+		Piece piece = PieceAtPos(pos);
+		if (piece.getColor() != Color::Black) {
+			cerr << "You are not allowed to move this piece\n";
+		}
+		else {
+			string pieceString = (stringPiece(piece.getColor(), piece.getKind()));
+			cout << "Where do you want to move this " << pieceString << "?\n";
+			int newPos[2];
+			readCords(newPos);
+			int dP[2];
+			DeltaPos(pos, newPos, dP);
+			if (checkMovement(dP, piece, newPos)) {
+				movement(piece, newPos);
+				return;
+			}
+			else
+				cerr << "Movement not allowed\n";
+		}
+	}
 }
 
 void game() {

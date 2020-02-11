@@ -57,6 +57,7 @@ bool MovementCheck::allowedQueenMovement(int dP[], Color color, int newPos[], Pi
 }
 
 bool MovementCheck::allowedKingMovement(int dP[], Color color, int newPos[], Piece pieceAtPos) {
+
 	return true;
 }
 
