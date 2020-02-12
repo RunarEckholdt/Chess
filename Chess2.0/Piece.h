@@ -2,6 +2,14 @@
 enum class Kind { Pawn, Rook, Knight, Bishop, Queen, King, NONE };
 enum class Color { White, Black, NONE };
 #pragma once
+
+class Cordinates {
+public:
+	int xPos;
+	int yPos;
+	Cordinates(int x, int y) :xPos(x), yPos(y) {}
+};
+
 class Piece {
 	Kind kind;
 	Color color;
@@ -23,3 +31,6 @@ public:
 
 
 };
+
+
+ostream& operator<<(ostream&, Piece);

@@ -35,3 +35,37 @@ Piece::Piece(Kind k, Color c, int i, int x, int y) {
 	xPos = x;
 	yPos = y;
 }
+
+
+ostream& operator<<(ostream& os, Piece piece) {
+	string text = "";
+	if (piece.getColor() == Color::White)
+		text.append("White ");
+	else
+		text.append("Black ");
+	switch (piece.getKind())
+	{
+	case Kind::Pawn:
+		text.append("Pawn");
+		break;
+	case Kind::Rook:
+		text.append("Rook");
+		break;
+	case Kind::Knight:
+		text.append("Knigh");
+		break;
+	case Kind::Bishop:
+		text.append("Bishop");
+		break;
+	case Kind::Queen:
+		text.append("Queen");
+		break;
+	case Kind::King:
+		text.append("King");
+		break;
+	default:
+		break;
+	}
+	
+	return os << text;
+}

@@ -48,7 +48,7 @@ bool MovementCheck::allowedKnighMovement(int dP[], Color color, int newPos[], Pi
 }
 
 bool MovementCheck::allowedQueenMovement(int dP[], Color color, int newPos[], Piece pieceAtPos){
-	if (dP[0] > 0 && dP[1] == 0 + dP[0] == 0 && dP[1] > 0) {
+	if (abs(dP[0]) > 0 && dP[1] == 0 || dP[0] == 0 && abs(dP[1]) > 0) {
 		if (pieceAtPos.getColor() != color)return true;//if piece at pos is not the same as piece moving
 	}
 	if (abs(dP[0]) > 0 && abs(dP[0]) == abs(dP[1]) && pieceAtPos.getColor() != color)

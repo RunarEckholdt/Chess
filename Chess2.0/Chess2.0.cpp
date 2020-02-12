@@ -196,36 +196,34 @@ void printBoard() {
 int* DeltaPos(int curPos[], int newPos [],int* deltaPos) {
 	deltaPos[0] = newPos[0] - curPos[0]; //x
 	deltaPos[1] = newPos[1] - curPos[1]; //y
-	//cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
+	cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
 	return deltaPos;
 }
 
-bool allowedPath() {
-	return true;
-}
+
 
 bool checkMovement(int deltaPos[],Piece piece,int newPos[]) {
 	switch (piece.getKind())
 	{
 	case Kind::Pawn:
 		cout << "Checking movement for pawn\n";
-		if (mcheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos,PieceAtPos(newPos)) && allowedPath())
+		if (mcheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), newPos,PieceAtPos(newPos)) && aPath.allowedPath(deltaPos,piece, newPos, pieces))
 			return true;
 		break;
 	case Kind::Rook:
-		if (mcheck.allowedRookMovement(deltaPos, piece.getColor(), newPos,PieceAtPos(newPos)) && allowedPath())
+		if (mcheck.allowedRookMovement(deltaPos, piece.getColor(), newPos,PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos, pieces))
 			return true;
 		break;
 	case Kind::Knight:
-		if (mcheck.allowedKnighMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
+		if (mcheck.allowedKnighMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos, pieces))
 			return true;
 		break;
 	case Kind::Bishop:
-		if (mcheck.allowedBishopMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
+		if (mcheck.allowedBishopMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos, pieces))
 			return true;
 		break;
 	case Kind::Queen:
-		if (mcheck.allowedQueenMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && allowedPath())
+		if (mcheck.allowedQueenMovement(deltaPos, piece.getColor(), newPos, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos, pieces))
 			return true;
 
 		break;

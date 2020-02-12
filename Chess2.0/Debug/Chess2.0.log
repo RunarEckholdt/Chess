@@ -1,2 +1,5 @@
-﻿  Chess2.0.cpp
+﻿  AllowedPath.cpp
+C:\Users\Runar\source\repos\Chess2.0\Chess2.0\AllowedPath.cpp(15,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Runar\source\repos\Chess2.0\Chess2.0\AllowedPath.cpp(101,20): warning C4018: '<': signed/unsigned mismatch
+  LINK : C:\Users\Runar\source\repos\Chess2.0\Debug\Chess2.0.exe not found or not built by the last incremental link; performing full link
   Chess2.0.vcxproj -> C:\Users\Runar\source\repos\Chess2.0\Debug\Chess2.0.exe
