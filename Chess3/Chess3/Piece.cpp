@@ -31,7 +31,7 @@ ostream& operator<<(ostream& os, const Cordinate& cordinate){
 
 ostream& operator<<(ostream& os, const Piece& piece) {
 	string s = "";
-	s += (piece.getColor() == Color::white) ? "White " : "Black ";
+	s += (piece.getColor() == Color::White) ? "White " : "Black ";
 	switch (piece.getKind()){
 		case Kind::Pawn:
 			s += "Pawn";
@@ -39,7 +39,7 @@ ostream& operator<<(ostream& os, const Piece& piece) {
 		case Kind::Rook:
 			s += "Rook";
 			break;
-		case Kind::knight:
+		case Kind::Knight:
 			s += "Knight";
 			break;
 		case Kind::Bishop:

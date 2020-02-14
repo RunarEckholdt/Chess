@@ -151,11 +151,13 @@
     <ClCompile Include="Chess3.cpp" />
     <ClCompile Include="MovementCheck.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="PieceOverview.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllowedPath.h" />
     <ClInclude Include="MovementCheck.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="PieceOverview.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

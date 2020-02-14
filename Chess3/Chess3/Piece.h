@@ -1,6 +1,6 @@
 #include "..\std_lib_facilities.h"
-enum class Kind { Pawn, Rook, knight, Bishop, Queen, King, NONE };
-enum class Color {white, black, NONE};
+enum class Kind { Pawn, Rook, Knight, Bishop, Queen, King, NONE };
+enum class Color {White, Black, NONE};
 #pragma once
 
 struct Cordinate
