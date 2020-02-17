@@ -1,10 +1,16 @@
 #include"AllowedPath.h"
 
+//using namespace std;
+
 void setup();
+Cordinate readCords();
 void player(bool);
 void generatePieces(vector<Piece>&);
 Piece PieceAtPos(Cordinate pos);
 void printBoard();
+void movement(Piece piece, Cordinate newPos);
+bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos);
+
 
 
 MovementCheck mCheck;
@@ -21,24 +27,72 @@ vector <Piece> pieces;
 
 int main()
 {
-	Piece a(Kind::Pawn, Color::White, 56, Cordinate(1, 4));
-	cout << a << endl; 
+	
 	setup();
-	/*while (myGlobals::running) {
+	while (running) {
 		player(true);
 		player(false);
-	}*/
+	}
 	
 
 }
 
 void setup() {
 	generatePieces(pieces);
-	printBoard();
+	
+}
+
+int* DeltaPos(Cordinate curPos, Cordinate newPos, int* deltaPos) {
+	deltaPos[0] = newPos.xPos - curPos.xPos; //x
+	deltaPos[1] = newPos.yPos - curPos.yPos; //y
+	//cout << "Deltapos: " << deltaPos[0] << " " << deltaPos[1] << endl;
+	return deltaPos;
+}
+
+Cordinate readCords() {
+	int x, y;
+	try {
+		cin >> x >>y;
+		if (!cin)throw CinError{};
+		return Cordinate(x,y);
+	}
+	catch (CinError) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cerr << "Invalid input\n";
+		return readCords();
+
+	}
 }
 
 void player(bool isWhite) {
+	printBoard();
+	if (isWhite) cout << "Player 1: " << endl; 
+	else cout << "Player 2: " << endl;
 
+	while (true) {
+		cout << "Piece to move: ";
+		Cordinate pos = readCords();
+		Piece piece = PieceAtPos(pos);
+		if (piece.getColor() == Color::Black&&isWhite || piece.getColor() == Color::White && !isWhite) {
+			cerr << "You are not allowed to move this piece\n";
+		}
+		else if (piece.getColor() == Color::NONE) {
+			cerr << "There is no piece here to move\n";
+		}
+		else {
+			cout << "Where do you want to move this " << piece << "?\n";
+			Cordinate newPos = readCords();
+			int dP[2];
+			DeltaPos(pos, newPos, dP);
+			if (checkMovement(dP, piece, newPos)) {
+				movement(piece, newPos);
+				return;
+			}
+			else
+				cerr << "Movement not allowed\n";
+		}
+	}
 }
 
 void generatePieces(vector<Piece>& pieces) {
@@ -156,3 +210,51 @@ void printBoard() {
 	cout << endl;
 }
 
+bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
+	if (aPath.allowedPosition(newPos, piece, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos)) {
+		switch (piece.getKind())
+		{
+		case Kind::Pawn:
+			cout << "Checking movement for pawn\n";
+			if (mCheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), PieceAtPos(newPos)))
+				return true;
+			break;
+		case Kind::Rook:
+			if (mCheck.allowedRookMovement(deltaPos))
+				return true;
+			break;
+		case Kind::Knight:
+			if (mCheck.allowedKnightMovement(deltaPos))
+				return true;
+			break;
+		case Kind::Bishop:
+			if (mCheck.allowedBishopMovement(deltaPos))
+				return true;
+			break;
+		case Kind::Queen:
+			if (mCheck.allowedQueenMovement(deltaPos))
+				return true;
+
+			break;
+		case Kind::King:
+			if (mCheck.allowedKingMovement(deltaPos))
+				return true;
+			break;
+			return false;
+		}
+	}
+}
+
+void movement(Piece piece, Cordinate newPos) {
+	piece.changePos(newPos);
+	Piece pieceNewPos = PieceAtPos(newPos);
+	if (pieceNewPos.getColor() != Color::NONE)//hvis det er en brikke der, endre posisjonen dens ut av kartet
+		pieceNewPos.changePos(Cordinate(-1,-1));//-1 representerer at brikken er død
+	for (int i = 0; i < 32; i++) {
+		if (piece.getId() == pieces[i].getId())
+			pieces[i] = piece;
+		if (pieceNewPos.getId() == pieces[i].getId())
+			pieces[i] = pieceNewPos;
+	}
+
+}

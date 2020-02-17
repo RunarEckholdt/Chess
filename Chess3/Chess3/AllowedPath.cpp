@@ -18,7 +18,7 @@ extern vector <Piece> pieces;
 
 bool AllowedPath::allowedPath(int deltaPos[], Piece& piece, Cordinate newPos) {
 	cout << piece.getId() << endl;
-	if (newPos.xPos > 0 && newPos.yPos <= 8 && newPos.yPos > 0 && newPos.yPos <= 8) { //if newPos is inside map check the path
+	 
 		if (piece.getKind() == Kind::Knight)return true;
 		Cordinate curPos = {piece.getCordinate()};
 		vector <Cordinate> scanningPos;
@@ -33,6 +33,15 @@ bool AllowedPath::allowedPath(int deltaPos[], Piece& piece, Cordinate newPos) {
 		}
 		cout << "Piece is blocking the path" << endl;
 
+	
+	return false;
+}
+
+bool AllowedPath::allowedPosition(Cordinate newPos, const Piece& piece, const Piece& pieceAtPos) {
+	if (newPos.xPos > 0 && newPos.xPos <= 8 && newPos.yPos > 0 && newPos.yPos <= 8) {
+		if (piece.getColor() != pieceAtPos.getColor()) {
+			return true;
+		}
 	}
 	return false;
 }
