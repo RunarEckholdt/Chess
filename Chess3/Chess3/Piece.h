@@ -23,6 +23,8 @@ public:
 	Color getColor() const;
 	int getId() const;
 	Cordinate getCordinate() const;
+	int getXPos() const;
+	int getYPos() const;
 
 	void changePos(Cordinate);
 
@@ -35,7 +37,12 @@ public:
 
 
 ostream& operator<<(ostream&, const Cordinate&);
-ostream& operator<<(ostream&, Piece);
+ostream& operator<<(ostream&, const Piece&);
 
 bool operator==(const Piece&, const Piece&);
 bool operator==(const Cordinate&, const Cordinate&);
+
+
+
+
+

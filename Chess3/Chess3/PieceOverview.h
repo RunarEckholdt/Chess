@@ -2,6 +2,7 @@
 #include "Piece.h"
 
 
+
 class PieceOverview{
 	Color color;
 	int pawnsLeft;

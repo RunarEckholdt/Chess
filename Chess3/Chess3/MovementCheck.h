@@ -1,5 +1,5 @@
 #pragma once
-#include "Piece.h"
+#include "PieceOverview.h"
 class MovementCheck
 {
 	bool allowedPawnMovement(int deltaPos[],Color,int yPos,const Piece& pieceAtPos);

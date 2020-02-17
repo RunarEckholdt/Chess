@@ -6,6 +6,8 @@ Kind Piece::getKind () const { return kind; }
 Color Piece::getColor() const { return color; }
 int Piece::getId() const { return id; }
 Cordinate Piece::getCordinate() const { return cordinate; }
+int Piece::getXPos() const { return cordinate.xPos; }
+int Piece::getYPos() const { return cordinate.yPos; }
 
 void Piece::changePos(Cordinate cordinate) {
 	this->cordinate = cordinate;
@@ -31,7 +33,15 @@ ostream& operator<<(ostream& os, const Cordinate& cordinate){
 
 ostream& operator<<(ostream& os, const Piece& piece) {
 	string s = "";
-	s += (piece.getColor() == Color::White) ? "White " : "Black ";
+	switch (piece.getColor()) {
+		case Color::White:
+			s += "White";
+			break;
+		case Color::Black:
+			s += "Black";
+			break;
+	}
+	s += " ";
 	switch (piece.getKind()){
 		case Kind::Pawn:
 			s += "Pawn";
@@ -63,3 +73,7 @@ bool operator==(const Cordinate& c1, const Cordinate& c2) {
 	return c1.xPos == c2.xPos
 		&& c1.yPos == c2.yPos;
 }
+
+
+
+
