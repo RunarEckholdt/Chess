@@ -6,9 +6,9 @@ void setup();
 Cordinate readCords();
 void player(bool);
 void generatePieces(vector<Piece>&);
-Piece PieceAtPos(Cordinate pos);
+Piece& PieceAtPos(Cordinate pos);
 void printBoard();
-void movement(Piece piece, Cordinate newPos);
+void movement(Piece& piece, Cordinate newPos);
 bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos);
 
 
@@ -73,7 +73,7 @@ void player(bool isWhite) {
 	while (true) {
 		cout << "Piece to move: ";
 		Cordinate pos = readCords();
-		Piece piece = PieceAtPos(pos);
+		Piece& piece = PieceAtPos(pos);
 		if (piece.getColor() == Color::Black&&isWhite || piece.getColor() == Color::White && !isWhite) {
 			cerr << "You are not allowed to move this piece\n";
 		}
@@ -166,9 +166,9 @@ void generatePieces(vector<Piece>& pieces) {
 }
 
  
-Piece PieceAtPos(Cordinate pos) {
+Piece& PieceAtPos(Cordinate pos) {
 
-	for (Piece x : pieces) {
+	for (Piece& x : pieces) {
 		if (x.getCordinate()==pos)
 			return x;
 	}
@@ -188,22 +188,13 @@ void printBoard() {
 		}
 	}
 	for (int y = 8; y >= 1; y--) {
-		/*cout << " ";
-		for (int i = 0; i < 8; i++) {
-			cout << setw(1) << "/" << setw(12) << "" << setw(1) << char(92);
-		}
-		cout << endl;*/
+		
 		cout << y;
 		for (int i = 0; i < 8; i++) {
 			cout << setw(1) << "[" << setw(12) << Board[y-1][i] << setw(1) << "]";
 		}
 		cout << endl;
-		/*cout << " ";
-		for (int i = 0; i < 8; i++) {
-			cout << setw(1) << char(92) << setw(12) << "" << setw(1) << "/";
-		}
-		cout << endl;*/
-		//cout << "----------------------------------------------------------------------------------------------------------------\n";
+		
 	}
 	for (int i = 1; i <= 8; i++)
 		cout << setw(14) << i;
@@ -245,16 +236,16 @@ bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
 	}
 }
 
-void movement(Piece piece, Cordinate newPos) {
+void movement(Piece& piece, Cordinate newPos) {
 	piece.changePos(newPos);
-	Piece pieceNewPos = PieceAtPos(newPos);
+	Piece& pieceNewPos = PieceAtPos(newPos);
 	if (pieceNewPos.getColor() != Color::NONE)//hvis det er en brikke der, endre posisjonen dens ut av kartet
 		pieceNewPos.changePos(Cordinate(-1,-1));//-1 representerer at brikken er død
-	for (int i = 0; i < 32; i++) {
+	/*for (int i = 0; i < 32; i++) {
 		if (piece.getId() == pieces[i].getId())
 			pieces[i] = piece;
 		if (pieceNewPos.getId() == pieces[i].getId())
 			pieces[i] = pieceNewPos;
-	}
+	}*/
 
 }
