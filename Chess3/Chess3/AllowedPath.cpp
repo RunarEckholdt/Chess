@@ -17,7 +17,7 @@ extern vector <Piece> pieces;
 
 
 bool AllowedPath::allowedPath(int deltaPos[], Piece& piece, Cordinate newPos) {
-	cout << piece.getId() << endl;
+	//cout << piece.getId() << endl;
 	 
 		if (piece.getKind() == Kind::Knight)return true;
 		Cordinate curPos = {piece.getCordinate()};

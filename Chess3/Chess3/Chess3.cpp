@@ -45,6 +45,7 @@ void setup() {
 }
 
 void gameOver() {
+	printBoard();
 	if (whiteOverview.piecesLeft(Kind::King) == 0) {
 		cout << "Player 2 wins!" << endl;
 	}
