@@ -237,15 +237,11 @@ bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
 }
 
 void movement(Piece& piece, Cordinate newPos) {
-	piece.changePos(newPos);
 	Piece& pieceNewPos = PieceAtPos(newPos);
 	if (pieceNewPos.getColor() != Color::NONE)//hvis det er en brikke der, endre posisjonen dens ut av kartet
-		pieceNewPos.changePos(Cordinate(-1,-1));//-1 representerer at brikken er død
-	/*for (int i = 0; i < 32; i++) {
-		if (piece.getId() == pieces[i].getId())
-			pieces[i] = piece;
-		if (pieceNewPos.getId() == pieces[i].getId())
-			pieces[i] = pieceNewPos;
-	}*/
+		pieceNewPos.changePos(Cordinate(-1, -1));//-1 representerer at brikken er død
+	piece.changePos(newPos);
+	
+	
 
 }
