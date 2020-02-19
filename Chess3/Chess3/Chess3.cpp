@@ -3,6 +3,7 @@
 //using namespace std;
 
 void setup();
+void gameOver();
 Cordinate readCords();
 void player(bool);
 void generatePieces(vector<Piece>&);
@@ -33,6 +34,7 @@ int main()
 		player(true);
 		player(false);
 	}
+	gameOver();
 	
 
 }
@@ -40,6 +42,15 @@ int main()
 void setup() {
 	generatePieces(pieces);
 	
+}
+
+void gameOver() {
+	if (whiteOverview.piecesLeft(Kind::King) == 0) {
+		cout << "Player 2 wins!" << endl;
+	}
+	else if (blackOverview.piecesLeft(Kind::King) == 0) {
+		cout << "Player 1 wins!" << endl;
+	}
 }
 
 int* DeltaPos(Cordinate curPos, Cordinate newPos, int* deltaPos) {
@@ -238,8 +249,15 @@ bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
 
 void movement(Piece& piece, Cordinate newPos) {
 	Piece& pieceNewPos = PieceAtPos(newPos);
-	if (pieceNewPos.getColor() != Color::NONE)//hvis det er en brikke der, endre posisjonen dens ut av kartet
+	if (pieceNewPos.getColor() != Color::NONE) {//hvis det er en brikke der, endre posisjonen dens ut av kartet
+		if (pieceNewPos.getKind() == Kind::King)
+			running = false;
 		pieceNewPos.changePos(Cordinate(-1, -1));//-1 representerer at brikken er død
+		if (pieceNewPos.getColor() == Color::Black) 
+			blackOverview.regDeadPiece(pieceNewPos.getKind());
+		else 
+			whiteOverview.regDeadPiece(pieceNewPos.getKind());
+	}
 	piece.changePos(newPos);
 	
 	
