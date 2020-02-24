@@ -275,9 +275,8 @@ void movement(Piece* piece, Cordinate newPos) {
 }
 
 void updatePieceAtBoard(Piece* piece, Cordinate newPos) {
+	board[piece->getYPos() - 1][piece->getXPos() - 1] = nullptr;
 	if (newPos.yPos > 0 && newPos.xPos > 0) {
-		board[newPos.yPos - 1][newPos.xPos - 1] == piece;
+		board[newPos.yPos - 1][newPos.xPos - 1] = piece;
 	}
-	board[piece->getYPos() - 1][piece->getXPos() - 1] == nullptr;
-	
 }
