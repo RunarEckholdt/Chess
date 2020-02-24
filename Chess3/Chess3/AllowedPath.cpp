@@ -37,9 +37,10 @@ bool AllowedPath::allowedPath(int deltaPos[], Piece& piece, Cordinate newPos) {
 	return false;
 }
 
-bool AllowedPath::allowedPosition(Cordinate newPos, const Piece& piece, const Piece& pieceAtPos) {
+bool AllowedPath::allowedPosition(Cordinate newPos, const Piece& piece, Piece* pieceAtPos) {
 	if (newPos.xPos > 0 && newPos.xPos <= 8 && newPos.yPos > 0 && newPos.yPos <= 8) {
-		if (piece.getColor() != pieceAtPos.getColor()) {
+		if (pieceAtPos == nullptr)return true;
+		else if (piece.getColor() != pieceAtPos->getColor()) {
 			return true;
 		}
 	}

@@ -1,12 +1,14 @@
 #include "MovementCheck.h"
 
-bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, const Piece pieceAtPos) {
+bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, Piece* pieceAtPos) {
 	if (color == Color::White) {
-		if (dP[0] == 0) {//if no movement in x axis and no piece at position (id -1 represent no piece) a forward movemnt with pawn does not allow killing enemy piece
-			if (dP[1] == 2 && yPos == 2 && pieceAtPos.getColor() == Color::NONE)return true;
-			if (dP[1] == 1&& pieceAtPos.getColor() == Color::NONE) return true;
+		if (pieceAtPos == nullptr) {
+			if (dP[0] == 0) {//if no movement in x axis and no piece at position (id -1 represent no piece) a forward movemnt with pawn does not allow killing enemy piece
+				if (dP[1] == 2 && yPos == 2 && pieceAtPos == nullptr)return true;
+				if (dP[1] == 1 && pieceAtPos == nullptr) return true;
+			}
 		}
-		if (abs(dP[0]) == 1 && dP[1] == 1 && pieceAtPos.getColor() == Color::Black)
+		if (abs(dP[0]) == 1 && dP[1] == 1 && pieceAtPos->getColor() == Color::Black)
 			return true;
 		return false;
 	}
@@ -15,7 +17,7 @@ bool MovementCheck::allowedPawnMovement(int dP[], Color color, int yPos, const P
 			if (dP[1] == -2 && yPos == 7)return true;
 			if (dP[1] == -1) return true;
 		}
-		if (abs(dP[0]) == 1 && dP[1] == -1 && pieceAtPos.getColor() == Color::White)
+		if (abs(dP[0]) == 1 && dP[1] == -1 && pieceAtPos->getColor() == Color::White)
 			return true;
 		return false;
 	}

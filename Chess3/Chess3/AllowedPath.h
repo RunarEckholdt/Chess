@@ -7,6 +7,6 @@ class AllowedPath
 {
 public:
 	bool allowedPath(int deltapos[], Piece& piece, Cordinate newPos);
-	bool allowedPosition(Cordinate newPos,const Piece& piece, const Piece& pieceAtPos);
+	bool allowedPosition(Cordinate newPos,const Piece& piece, Piece* pieceAtPos);
 };
 

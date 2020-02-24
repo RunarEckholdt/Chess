@@ -13,6 +13,8 @@ void Piece::changePos(Cordinate cordinate) {
 	this->cordinate = cordinate;
 }
 
+Piece::~Piece(){}
+
 Piece::Piece() {
 	kind = Kind::NONE;
 	color = Color::NONE;

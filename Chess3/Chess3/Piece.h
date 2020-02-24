@@ -28,6 +28,7 @@ public:
 
 	void changePos(Cordinate);
 
+	~Piece();
 	Piece();
 	Piece(Kind,Color,int,Cordinate);
 

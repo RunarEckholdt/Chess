@@ -3,14 +3,16 @@
 //using namespace std;
 
 void setup();
+void createBoard();
 void gameOver();
 Cordinate readCords();
 void player(bool);
 void generatePieces(vector<Piece>&);
-Piece& PieceAtPos(Cordinate pos);
+Piece* PieceAtPos(Cordinate pos);
 void printBoard();
-void movement(Piece& piece, Cordinate newPos);
-bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos);
+void movement(Piece* piece, Cordinate newPos);
+bool checkMovement(int deltaPos[], Piece* piece, Cordinate newPos);
+void updatePieceAtBoard(Piece* piece, Cordinate newPos);
 
 
 
@@ -24,6 +26,7 @@ class CinError {};
 
 bool running = true;
 vector <Piece> pieces;
+Piece* board[8][8];
 
 
 int main()
@@ -41,7 +44,17 @@ int main()
 
 void setup() {
 	generatePieces(pieces);
+	createBoard();
 	
+}
+
+void createBoard() {
+	for (Piece& piece : pieces) {
+		if (piece.getXPos() > 0 && piece.getYPos() > 0) { //hvis brikken ikke er flyttet av brettet (død)
+			board[piece.getYPos() - 1][piece.getXPos() - 1] = &piece; //possisjonerer brikken i en array etter kordinatene dens
+
+		}
+	}
 }
 
 void gameOver() {
@@ -85,15 +98,16 @@ void player(bool isWhite) {
 	while (true) {
 		cout << "Piece to move: ";
 		Cordinate pos = readCords();
-		Piece& piece = PieceAtPos(pos);
-		if (piece.getColor() == Color::Black&&isWhite || piece.getColor() == Color::White && !isWhite) {
-			cerr << "You are not allowed to move this piece\n";
-		}
-		else if (piece.getColor() == Color::NONE) {
+		Piece* piece = PieceAtPos(pos);
+		if (piece == nullptr) {
 			cerr << "There is no piece here to move\n";
 		}
-		else {
-			cout << "Where do you want to move this " << piece << "?\n";
+		else if (piece->getColor() == Color::Black&&isWhite || piece->getColor() == Color::White && !isWhite) {
+			cerr << "You are not allowed to move this piece\n";
+		}
+		else 
+		{
+			cout << "Where do you want to move this " << *piece << "?\n";
 			Cordinate newPos = readCords();
 			int dP[2];
 			DeltaPos(pos, newPos, dP);
@@ -178,32 +192,22 @@ void generatePieces(vector<Piece>& pieces) {
 }
 
  
-Piece& PieceAtPos(Cordinate pos) {
-
-	for (Piece& x : pieces) {
-		if (x.getCordinate()==pos)
-			return x;
-	}
-	Piece none;
-	return none;
+Piece* PieceAtPos(Cordinate pos) {
+	if (board[pos.yPos - 1][pos.xPos - 1] != nullptr)return board[pos.yPos - 1][pos.xPos - 1];
+	return nullptr;
 }
 
 
 
 void printBoard() {
 	system("CLS");
-	Piece Board[8][8];
-	for (Piece piece:pieces) {
-		if (piece.getXPos() > 0 && piece.getYPos() > 0) { //hvis brikken ikke er flyttet av brettet (død)
-			Board[piece.getYPos() - 1][piece.getXPos() - 1] = piece; //possisjonerer brikken i en array etter kordinatene dens
-			
-		}
-	}
 	for (int y = 8; y >= 1; y--) {
 		
 		cout << y;
 		for (int i = 0; i < 8; i++) {
-			cout << setw(1) << "[" << setw(12) << Board[y-1][i] << setw(1) << "]";
+			if(board[y - 1][i]!=nullptr)cout << setw(1) << "[" << setw(12) << *board[y - 1][i] << setw(1) << "]";
+			else cout << setw(1) << "[" << setw(12) << "" << setw(1) << "]";
+			
 		}
 		cout << endl;
 		
@@ -213,13 +217,13 @@ void printBoard() {
 	cout << endl;
 }
 
-bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
-	if (aPath.allowedPosition(newPos, piece, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, piece, newPos)) {
-		switch (piece.getKind())
+bool checkMovement(int deltaPos[], Piece* piece, Cordinate newPos) {
+	if (aPath.allowedPosition(newPos, *piece, PieceAtPos(newPos)) && aPath.allowedPath(deltaPos, *piece, newPos)) {
+		switch (piece->getKind())
 		{
 		case Kind::Pawn:
 			cout << "Checking movement for pawn\n";
-			if (mCheck.allowedPawnMovement(deltaPos, piece.getColor(), piece.getYPos(), PieceAtPos(newPos)))
+			if (mCheck.allowedPawnMovement(deltaPos, piece->getColor(), piece->getYPos(), PieceAtPos(newPos)))
 				return true;
 			break;
 		case Kind::Rook:
@@ -248,19 +252,32 @@ bool checkMovement(int deltaPos[], Piece& piece, Cordinate newPos) {
 	}
 }
 
-void movement(Piece& piece, Cordinate newPos) {
-	Piece& pieceNewPos = PieceAtPos(newPos);
-	if (pieceNewPos.getColor() != Color::NONE) {//hvis det er en brikke der, endre posisjonen dens ut av kartet
-		if (pieceNewPos.getKind() == Kind::King)
+void movement(Piece* piece, Cordinate newPos) {
+	
+	Piece* pieceNewPos = PieceAtPos(newPos);
+	
+	if (pieceNewPos != nullptr) {//hvis det er en brikke der, endre posisjonen dens ut av kartet
+		if (pieceNewPos->getKind() == Kind::King)
 			running = false;
-		pieceNewPos.changePos(Cordinate(-1, -1));//-1 representerer at brikken er død
-		if (pieceNewPos.getColor() == Color::Black) 
-			blackOverview.regDeadPiece(pieceNewPos.getKind());
+		updatePieceAtBoard(pieceNewPos, Cordinate(-1, -1));
+		pieceNewPos->changePos(Cordinate(-1, -1));//-1 representerer at brikken er død
+		if (pieceNewPos->getColor() == Color::Black) 
+			blackOverview.regDeadPiece(pieceNewPos->getKind());
 		else 
-			whiteOverview.regDeadPiece(pieceNewPos.getKind());
+			whiteOverview.regDeadPiece(pieceNewPos->getKind());
 	}
-	piece.changePos(newPos);
+	if (pieceNewPos == nullptr) delete pieceNewPos;
+	updatePieceAtBoard(piece, newPos);
+	piece->changePos(newPos);
 	
 	
 
+}
+
+void updatePieceAtBoard(Piece* piece, Cordinate newPos) {
+	if (newPos.yPos > 0 && newPos.xPos > 0) {
+		board[newPos.yPos - 1][newPos.xPos - 1] == piece;
+	}
+	board[piece->getYPos() - 1][piece->getXPos() - 1] == nullptr;
+	
 }
